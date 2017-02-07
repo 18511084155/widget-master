@@ -1,0 +1,16 @@
+<resources>
+
+    <declare-styleable name="CouponView">
+        <attr name="cv_semicircle_gap" format="dimension|reference"/>
+        <attr name="cv_semicircle_radius" format="dimension|reference"/>
+        <attr name="cv_semicircle_color" format="color|reference"/>
+        <attr name="cv_dash_line_length" format="dimension|reference"/>
+        <attr name="cv_dash_line_gap" format="dimension|reference"/>
+        <attr name="cv_dash_line_height" format="dimension|reference"/>
+        <attr name="cv_dash_line_color" format="color|reference"/>
+        <attr name="cv_dash_line_margin_top" format="dimension|reference"/>
+        <attr name="cv_dash_line_margin_bottom" format="dimension|reference"/>
+        <attr name="cv_dash_line_margin_left" format="dimension|reference"/>
+        <attr name="cv_dash_line_margin_right" format="dimension|reference"/>
+    </declare-styleable>
+</resources>
