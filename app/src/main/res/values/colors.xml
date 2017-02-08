@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#FFFFFFFF</color>
-    <color name="divide">#EEEEEE</color>
+    <color name="divide">#FFE5E5E5</color>
+    <color name="red">#FFFF5555</color>
+    <color name="pink">#FF6161</color>
+    <color name="light_pink">#FC9E9E</color>
+
+    <color name="black">#FF000000</color>
+    <color name="gray">#E1E1E1</color>
+    <color name="dark_gray">#FFCCCCCC</color>
+    <color name="light_gray">#FF666666</color>
+
     <array name="colors">
         <item>@color/colorBluePrimary</item>
         <item>@color/colorRedPrimary</item>

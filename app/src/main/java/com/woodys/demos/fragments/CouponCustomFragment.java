@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 
 import com.woodys.demos.R;
@@ -22,10 +23,9 @@ import butterknife.ButterKnife;
  * A simple {@link Fragment} subclass.
  */
 public class CouponCustomFragment extends Fragment {
-
-
     @Bind(R.id.couponView) CouponView mCouponView;
     @Bind(R.id.cb_orientation) CheckBox mOrientation;
+    @Bind(R.id.rg_state) RadioGroup mState;
     @Bind(R.id.sbSemicircleRadius) SeekBar mSbSemicircleRadius;
     @Bind(R.id.sbSemicircleCap) SeekBar mSbSemicircleCap;
     @Bind(R.id.sbDashLineLength) SeekBar mSbDashLineLength;
@@ -48,6 +48,30 @@ public class CouponCustomFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        mState.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.rb_select:
+                        mCouponView.setEnabled(true);
+                        mCouponView.setSelected(!mCouponView.isSelected());
+                        break;
+                    case R.id.rb_enabled:
+                        mCouponView.setSelected(false);
+                        mCouponView.setEnabled(!mCouponView.isEnabled());
+                        break;
+                }
+            }
+        });
+
+        mCouponView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCouponView.setEnabled(true);
+                mCouponView.setSelected(!mCouponView.isSelected());
+            }
+        });
 
         mOrientation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

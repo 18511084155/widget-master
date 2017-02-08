@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_margin="10dp"
-        android:background="@drawable/gray2primary_select_stroke_selector"
+        android:background="@drawable/tab_item_selector"
         android:orientation="horizontal"
         android:padding="10dp"
         app:cv_dash_line_color="@android:color/white"
@@ -106,6 +106,36 @@
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="horizontal"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="状态选择"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioGroup
+                    android:id="@+id/rg_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <RadioButton
+                        android:id="@+id/rb_select"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="select"/>
+
+                    <RadioButton
+                        android:id="@+id/rb_enabled"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="enabled"/>
+
+                </RadioGroup>
 
             </LinearLayout>
 
