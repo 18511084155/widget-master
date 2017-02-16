@@ -44,6 +44,7 @@ public class CouponCustomFragment extends Fragment {
         ButterKnife.bind(this, view);
         return view;
     }
+    private boolean isFocusable;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

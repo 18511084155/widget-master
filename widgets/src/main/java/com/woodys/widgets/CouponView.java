@@ -162,8 +162,8 @@ public class CouponView extends LinearLayout {
         semicircleNumX = (int) ((viewWidth - semicircleGap) / (2 * semicircleRadius + semicircleGap));
 
         if (HORIZONTAL == orientation) {
-            remindDashLineY = (int) ((viewHeight + dashLineGap - dashLineMarginTop - dashLineMarginBottom) % (dashLineLength + dashLineGap));
-            dashLineNumY = (int) ((viewHeight + dashLineGap - dashLineMarginTop - dashLineMarginBottom) / (dashLineLength + dashLineGap));
+            remindDashLineY = (int) ((viewHeight + dashLineGap - dashLineMarginTop - dashLineMarginBottom-semicircleRadius*2) % (dashLineLength + dashLineGap));
+            dashLineNumY = (int) ((viewHeight + dashLineGap - dashLineMarginTop - dashLineMarginBottom-semicircleRadius*2) / (dashLineLength + dashLineGap));
         }else {
             remindDashLineX = (int) ((viewWidth + dashLineGap - dashLineMarginLeft - dashLineMarginRight) % (dashLineLength + dashLineGap));
             dashLineNumX = (int) ((viewWidth + dashLineGap - dashLineMarginLeft - dashLineMarginRight) / (dashLineLength + dashLineGap));
@@ -184,7 +184,7 @@ public class CouponView extends LinearLayout {
                         canvas.drawCircle(right + dashLineMarginLeft - dashLineMarginRight - dashLineHeight, 0, semicircleRadius, semicirclePaint);
                         canvas.drawCircle(right + dashLineMarginLeft - dashLineMarginRight - dashLineHeight, getHeight(), semicircleRadius, semicirclePaint);
 
-                        float y = dashLineMarginTop + remindDashLineY / 2 + (dashLineGap + dashLineLength) * m;
+                        float y = dashLineMarginTop + semicircleRadius + remindDashLineY / 2 + (dashLineGap + dashLineLength) * m;
                         canvas.drawRect(right + dashLineMarginLeft - dashLineMarginRight - dashLineHeight, y, right+ dashLineMarginLeft - dashLineMarginRight, y + dashLineLength, dashLinePaint);
                     }
                 } else if (VERTICAL == orientation) {
