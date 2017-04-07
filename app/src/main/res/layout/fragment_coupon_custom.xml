@@ -27,6 +27,7 @@
         app:cv_semicircle_gap="8dp"
         app:cv_semicircle_radius="4dp">
         <LinearLayout
+            android:id="@+id/ll_leftView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="3"
@@ -82,7 +83,6 @@
         android:layout_height="match_parent"
         tools:context="com.woodys.demos.fragments.CouponCustomFragment">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="切换方向"/>
+                android:text="半圆边缘"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -101,13 +101,70 @@
                 android:orientation="horizontal">
 
                 <CheckBox
-                    android:id="@+id/cb_orientation"
+                    android:id="@+id/semicircle_top"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="horizontal"/>
+                    android:text="top"/>
 
+                <CheckBox
+                    android:id="@+id/semicircle_bottom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="bottom"/>
+
+                <CheckBox
+                    android:id="@+id/semicircle_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="left"/>
+
+                <CheckBox
+                    android:id="@+id/semicircle_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="right"/>
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="虚线边框"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/dash_line_top"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="top"/>
+
+                <CheckBox
+                    android:id="@+id/dash_line_bottom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="bottom"/>
+
+                <CheckBox
+                    android:id="@+id/dash_line_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="left"/>
+
+                <CheckBox
+                    android:id="@+id/dash_line_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="right"/>
+            </LinearLayout>
+
 
             <TextView
                 android:layout_width="wrap_content"
