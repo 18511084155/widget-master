@@ -78,10 +78,10 @@ public class CouponViewHelper {
     private int dashLineNumY;
 
     //开启顶部半圆曲线
-    private boolean isSemicircleTop = true;
+    private boolean isSemicircleTop = false;
 
     //开启底部半圆曲线
-    private boolean isSemicircleBottom = true;
+    private boolean isSemicircleBottom = false;
 
     //开启左边半圆曲线
     private boolean isSemicircleLeft = false;
@@ -96,7 +96,7 @@ public class CouponViewHelper {
     private boolean isDashLineBottom = false;
 
     //开启左边虚线
-    private boolean isDashLineLeft = true;
+    private boolean isDashLineLeft = false;
 
     //开启右边虚线
     private boolean isDashLineRight = false;
