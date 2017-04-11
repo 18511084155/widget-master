@@ -36,11 +36,11 @@
     </declare-styleable>
 
     <declare-styleable name="DashedLineView">
-        <attr name="dv_dashColor" format="color"/>
-        <attr name="dv_dashGap" format="dimension"/>
-        <attr name="dv_dashWidth" format="dimension"/>
-        <attr name="dv_strokeWidth" format="dimension"/>
-        <attr name="dv_dashOrientation" format="enum">
+        <attr name="dlv_dashColor" format="color"/>
+        <attr name="dlv_dashGap" format="dimension"/>
+        <attr name="dlv_dashWidth" format="dimension"/>
+        <attr name="dlv_strokeWidth" format="dimension"/>
+        <attr name="dlv_dashOrientation" format="enum">
             <enum name="horizontal" value="0"/>
             <enum name="vertical" value="1"/>
         </attr>

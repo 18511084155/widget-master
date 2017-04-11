@@ -35,10 +35,10 @@ public abstract class BaseDashedLine extends View {
 
     private void initAttr(AttributeSet attrs) {
         TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.DashedLineView);
-        mDashColor = typedArray.getColor(R.styleable.DashedLineView_dv_dashColor, Color.TRANSPARENT);
-        mStrokeWidth = typedArray.getDimensionPixelSize(R.styleable.DashedLineView_dv_strokeWidth, 0);
-        int mDashGap = typedArray.getDimensionPixelSize(R.styleable.DashedLineView_dv_dashGap, 0);
-        int mDashWidth = typedArray.getDimensionPixelSize(R.styleable.DashedLineView_dv_dashWidth, 1);
+        mDashColor = typedArray.getColor(R.styleable.DashedLineView_dlv_dashColor, Color.TRANSPARENT);
+        mStrokeWidth = typedArray.getDimensionPixelSize(R.styleable.DashedLineView_dlv_strokeWidth, 0);
+        int mDashGap = typedArray.getDimensionPixelSize(R.styleable.DashedLineView_dlv_dashGap, 0);
+        int mDashWidth = typedArray.getDimensionPixelSize(R.styleable.DashedLineView_dlv_dashWidth, 1);
         mDashEffect = new DashEffect(mDashWidth, mDashGap);
 
         initAttr(typedArray);

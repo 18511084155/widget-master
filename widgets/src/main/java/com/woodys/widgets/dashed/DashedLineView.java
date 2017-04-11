@@ -39,7 +39,7 @@ public class DashedLineView extends BaseDashedLine {
 
     @Override
     protected void initAttr(TypedArray typedArray) {
-        mOrientation = typedArray.getInt(R.styleable.DashedLineView_dv_dashOrientation, DEFAULT_DASH_ORIENTATION);
+        mOrientation = typedArray.getInt(R.styleable.DashedLineView_dlv_dashOrientation, DEFAULT_DASH_ORIENTATION);
     }
 
     private void init() {
