@@ -3,7 +3,6 @@ package com.woodys.widgets;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 public class CouponView extends LinearLayout {
