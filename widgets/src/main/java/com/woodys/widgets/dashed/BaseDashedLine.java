@@ -39,7 +39,8 @@ public abstract class BaseDashedLine extends View {
         mStrokeWidth = typedArray.getDimensionPixelSize(R.styleable.DashedLineView_dlv_strokeWidth, 0);
         int mDashGap = typedArray.getDimensionPixelSize(R.styleable.DashedLineView_dlv_dashGap, 0);
         int mDashWidth = typedArray.getDimensionPixelSize(R.styleable.DashedLineView_dlv_dashWidth, 1);
-        mDashEffect = new DashEffect(mDashWidth, mDashGap);
+        int mOffset = typedArray.getDimensionPixelSize(R.styleable.DashedLineView_dlv_offset, 0);
+        mDashEffect = new DashEffect(mDashWidth, mDashGap,mOffset);
 
         initAttr(typedArray);
         typedArray.recycle();

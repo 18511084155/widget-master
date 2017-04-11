@@ -40,6 +40,7 @@
         <attr name="dlv_dashGap" format="dimension"/>
         <attr name="dlv_dashWidth" format="dimension"/>
         <attr name="dlv_strokeWidth" format="dimension"/>
+        <attr name="dlv_offset" format="dimension"/>
         <attr name="dlv_dashOrientation" format="enum">
             <enum name="horizontal" value="0"/>
             <enum name="vertical" value="1"/>
