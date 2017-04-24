@@ -14,8 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.TextView;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.Calendar;
 
 /**
  * Created by woodys on 17/04/21.
@@ -41,7 +40,6 @@ public class ExpandTextView extends TextView implements View.OnClickListener {
     private boolean mAnimating = false;
     private boolean needCollapse = true; //标示是否需要折叠已显示末尾的图标
 
-    private Lock mLock;
     private int mDrawableSize = 0;
 
     /**
@@ -67,6 +65,12 @@ public class ExpandTextView extends TextView implements View.OnClickListener {
     /* Listener for callback */
     private OnExpandStateChangeListener mListener;
 
+    /**
+     * 优化点击动画频率
+     */
+    private static final int MIN_CLICK_DELAY_TIME = 350;
+    private long lastClickTime = 0;
+
 
     public ExpandTextView(Context context) {
         this(context, null);
@@ -78,7 +82,6 @@ public class ExpandTextView extends TextView implements View.OnClickListener {
 
     public ExpandTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mLock = new ReentrantLock();
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ExpandTextView, defStyleAttr, 0);
         mMaxCollapsedLines = typedArray.getInt(R.styleable.ExpandTextView_etv_maxCollapsedLines, MAX_COLLAPSED_LINES);
         mAnimationDuration = typedArray.getInt(R.styleable.ExpandTextView_etv_animDuration, DEFAULT_ANIM_DURATION);
@@ -197,44 +200,51 @@ public class ExpandTextView extends TextView implements View.OnClickListener {
     }
 
     public void startDropDownAnimator(final boolean collapsed){
-        mLock.lock();
-        setCollapsed(collapsed);
-        if (!needCollapse) {
-            return;//行数不足,不响应点击事件
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime > MIN_CLICK_DELAY_TIME) {
+            lastClickTime = currentTime;
+            if (!needCollapse) {
+                return;//行数不足,不响应点击事件
+            }
+            setCollapsed(collapsed);
+            clearAnimation();
+            // mark that the animation is in progress
+            mAnimating = true;
+            Animation animation = new ExpandCollapseAnimation(this, getHeight(), getRealTextViewHeight(this, collapsed ? mMaxCollapsedLines : Integer.MAX_VALUE));
+            animation.setFillAfter(true);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    if (mListener != null) {
+                        mListener.onChangeStateStart(!collapsed);
+                    }
+                    applyAlphaAnimation(ExpandTextView.this, mAnimAlphaStart);
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    // clear animation here to avoid repeated applyTransformation() calls
+                    clearAnimation();
+                    //还原以前的状态：
+                    int endHeight = ((ExpandCollapseAnimation) animation).mEndHeight;
+                    getLayoutParams().height = endHeight;
+                    setMaxHeight(endHeight);
+                    // clear the animation flag
+                    mAnimating = false;
+                    // notify the listener
+                    if (mListener != null) {
+                        mListener.onExpandStateChanged(ExpandTextView.this, !collapsed);
+                    }
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+            });
+            startAnimation(animation);
         }
-        // mark that the animation is in progress
-        mAnimating = true;
-        Animation animation = new ExpandCollapseAnimation(this, getHeight(), getRealTextViewHeight(this,collapsed?mMaxCollapsedLines:Integer.MAX_VALUE));
-        animation.setFillAfter(true);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                if (mListener != null) {
-                    mListener.onChangeStateStart(!collapsed);
-                }
-                applyAlphaAnimation(ExpandTextView.this, mAnimAlphaStart);
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                // clear animation here to avoid repeated applyTransformation() calls
-                clearAnimation();
-                // clear the animation flag
-                mAnimating = false;
-
-                // notify the listener
-                if (mListener != null) {
-                    mListener.onExpandStateChanged(ExpandTextView.this, !collapsed);
-                }
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-        startAnimation(animation);
-        mLock.unlock();
     }
+
 
     private class ExpandCollapseAnimation extends Animation {
         private final View mTargetView;
@@ -253,9 +263,11 @@ public class ExpandTextView extends TextView implements View.OnClickListener {
             final int newHeight = (int) ((mEndHeight - mStartHeight) * interpolatedTime + mStartHeight);
             mTargetView.getLayoutParams().height = newHeight;
             setMaxHeight(newHeight);
+            invalidate();
             if (Float.compare(mAnimAlphaStart, 1.0f) != 0) {
                 applyAlphaAnimation(ExpandTextView.this, mAnimAlphaStart + interpolatedTime * (1.0f - mAnimAlphaStart));
             }
+
         }
 
         @Override
