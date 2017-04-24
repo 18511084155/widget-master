@@ -112,6 +112,11 @@ public class ExpandTextView extends TextView implements View.OnClickListener {
         }
         needCollapse = true;
         setMaxLines(mCollapsed?mMaxCollapsedLines:Integer.MAX_VALUE);
+        //小于等于0的时候隐藏高度
+        if(mCollapsed && mMaxCollapsedLines<=0) {
+            getLayoutParams().height = 0;
+            setMaxHeight(0);
+        }
         mDrawableSize =(null!= mExpandDrawable)?mExpandDrawable.getIntrinsicWidth():0;
         if (!isDrawablePaddingResolved) {
             if (arrowPosition == POSITION_RIGHT) {
@@ -184,6 +189,10 @@ public class ExpandTextView extends TextView implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        startDropDownAnimator();
+    }
+
+    public void startDropDownAnimator(){
         startDropDownAnimator(!mCollapsed);
     }
 

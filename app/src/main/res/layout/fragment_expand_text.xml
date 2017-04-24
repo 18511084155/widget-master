@@ -37,7 +37,15 @@
             app:etv_expandDrawable="@drawable/ic_expand_small_holo_light"
             app:etv_collapseDrawable="@drawable/ic_collapse_small_holo_light" />
 
+        <Button
+            android:id="@+id/bt_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="测试按钮"/>
+
         <com.woodys.widgets.ExpandTextView
+            android:id="@+id/etv_ExpandTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="20dp"
@@ -47,6 +55,7 @@
             app:etv_arrowAlign="bottom"
             app:etv_arrowPosition="right"
             app:etv_maxCollapsedLines="0"
+            app:etv_is_collapsed="true"
             android:background="@color/pink"/>
     </LinearLayout>
 </ScrollView>
