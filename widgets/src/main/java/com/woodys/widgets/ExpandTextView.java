@@ -14,6 +14,9 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.TextView;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * Created by woodys on 17/04/21.
  * 两种模式,三种对齐选择和一个padding值
@@ -30,16 +33,16 @@ public class ExpandTextView extends TextView implements View.OnClickListener {
     private Drawable mExpandDrawable;//展开前显示图片
     private Drawable mCollapseDrawable;//展开后图片
 
-    private int mCollapsedHeight;
-    private int mTextHeightWithMaxLines;
+    private int mTextMaxLines;
 
-    private boolean mCollapsed = true; // Show short version as default.标示现在所处的折叠状态
+    private boolean mCollapsed; // Show short version as default.
+    //标示现在所处的折叠状态
+    private boolean IS_COLLAPSED = false;
     private boolean mAnimating = false;
     private boolean needCollapse = true; //标示是否需要折叠已显示末尾的图标
 
-
+    private Lock mLock;
     private int mDrawableSize = 0;
-
 
     /**
      * 表示箭头对齐方式,靠左/上,右/下,还是居中
@@ -75,7 +78,7 @@ public class ExpandTextView extends TextView implements View.OnClickListener {
 
     public ExpandTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
+        mLock = new ReentrantLock();
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ExpandTextView, defStyleAttr, 0);
         mMaxCollapsedLines = typedArray.getInt(R.styleable.ExpandTextView_etv_maxCollapsedLines, MAX_COLLAPSED_LINES);
         mAnimationDuration = typedArray.getInt(R.styleable.ExpandTextView_etv_animDuration, DEFAULT_ANIM_DURATION);
@@ -85,6 +88,7 @@ public class ExpandTextView extends TextView implements View.OnClickListener {
         arrowAlign = typedArray.getInteger(R.styleable.ExpandTextView_etv_arrowAlign, ALIGN_RIGHT_BOTTOM);
         arrowPosition = typedArray.getInteger(R.styleable.ExpandTextView_etv_arrowPosition, POSITION_RIGHT);
         arrowDrawablePadding = (int) typedArray.getDimension(R.styleable.ExpandTextView_etv_arrowPadding, DensityUtil.dp2px(context, 2f));
+        mCollapsed = typedArray.getBoolean(R.styleable.ExpandTextView_etv_is_collapsed,IS_COLLAPSED);
         typedArray.recycle();
 
         setClickable(true);
@@ -99,24 +103,15 @@ public class ExpandTextView extends TextView implements View.OnClickListener {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
             return;
         }
-
-        //重置高度重新测量
-        getLayoutParams().height = -2;//设置为wrap_content，重新measure
-        setMaxLines(Integer.MAX_VALUE);
         //测量TextView总高度
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        mTextMaxLines = getLineCount();
         if (getLineCount() <= mMaxCollapsedLines) {
             needCollapse = false;
             return;
         }
-
         needCollapse = true;
-
-        mTextHeightWithMaxLines = getRealTextViewHeight(this);
-        if (mCollapsed) {
-            setMaxLines(mMaxCollapsedLines);
-        }
-
+        setMaxLines(mCollapsed?mMaxCollapsedLines:Integer.MAX_VALUE);
         mDrawableSize =(null!= mExpandDrawable)?mExpandDrawable.getIntrinsicWidth():0;
         if (!isDrawablePaddingResolved) {
             if (arrowPosition == POSITION_RIGHT) {
@@ -126,12 +121,8 @@ public class ExpandTextView extends TextView implements View.OnClickListener {
             }
             isDrawablePaddingResolved = true;
         }
-
         //设置完成后重新测量
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        if (mCollapsed) {
-            mCollapsedHeight = getMeasuredHeight();
-        }
 
     }
 
@@ -188,36 +179,29 @@ public class ExpandTextView extends TextView implements View.OnClickListener {
 
     @Override
     public void setText(CharSequence text, BufferType type) {
-        setCollapsed(true);
         super.setText(text, type);
     }
 
     @Override
     public void onClick(View v) {
-        startDropDownAnimator();
+        startDropDownAnimator(!mCollapsed);
     }
 
-    public void startDropDownAnimator(){
+    public void startDropDownAnimator(final boolean collapsed){
+        mLock.lock();
+        setCollapsed(collapsed);
         if (!needCollapse) {
             return;//行数不足,不响应点击事件
         }
-        mCollapsed = !mCollapsed;
         // mark that the animation is in progress
         mAnimating = true;
-
-        Animation animation;
-        if (mCollapsed) {
-            animation = new ExpandCollapseAnimation(this, getHeight(), mCollapsedHeight);
-        } else {
-            animation = new ExpandCollapseAnimation(this, getHeight(), mTextHeightWithMaxLines);
-        }
-
+        Animation animation = new ExpandCollapseAnimation(this, getHeight(), getRealTextViewHeight(this,collapsed?mMaxCollapsedLines:Integer.MAX_VALUE));
         animation.setFillAfter(true);
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 if (mListener != null) {
-                    mListener.onChangeStateStart(!mCollapsed);
+                    mListener.onChangeStateStart(!collapsed);
                 }
                 applyAlphaAnimation(ExpandTextView.this, mAnimAlphaStart);
             }
@@ -231,7 +215,7 @@ public class ExpandTextView extends TextView implements View.OnClickListener {
 
                 // notify the listener
                 if (mListener != null) {
-                    mListener.onExpandStateChanged(ExpandTextView.this, !mCollapsed);
+                    mListener.onExpandStateChanged(ExpandTextView.this, !collapsed);
                 }
             }
 
@@ -239,9 +223,8 @@ public class ExpandTextView extends TextView implements View.OnClickListener {
             public void onAnimationRepeat(Animation animation) {
             }
         });
-
-        clearAnimation();
         startAnimation(animation);
+        mLock.unlock();
     }
 
     private class ExpandCollapseAnimation extends Animation {
@@ -308,15 +291,20 @@ public class ExpandTextView extends TextView implements View.OnClickListener {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
 
-    private int getRealTextViewHeight(TextView textView) {
-        int textHeight = textView.getLayout().getLineTop(textView.getLineCount());
+    private int getRealTextViewHeight(TextView textView,int line) {
+        int textLineCount = Math.min(line,mTextMaxLines);
+        int textHeight = textView.getLayout().getLineTop(textLineCount);
         int padding = textView.getCompoundPaddingTop() + textView.getCompoundPaddingBottom();
-        return textHeight + padding;
+        return textLineCount>0?textHeight + padding:0;
     }
 
 
     public void setCollapsed(boolean isCollapsed) {
         mCollapsed = isCollapsed;
+    }
+
+    public boolean isCollapsed() {
+        return mCollapsed;
     }
 
 

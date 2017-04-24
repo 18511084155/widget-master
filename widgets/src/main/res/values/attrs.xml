@@ -64,5 +64,6 @@
             <enum name="below" value="1"/>
         </attr>
         <attr name="etv_arrowPadding" format="dimension"/>
+        <attr name="etv_is_collapsed" format="boolean|reference"/>
     </declare-styleable>
 </resources>

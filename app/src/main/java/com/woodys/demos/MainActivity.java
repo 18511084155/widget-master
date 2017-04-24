@@ -15,13 +15,14 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import com.woodys.demos.fragments.CouponCustomFragment;
+import com.woodys.demos.fragments.ExpandTextFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     @Bind(R.id.tab) TabLayout mTab;
     @Bind(R.id.pager) ViewPager mPager;
 
-    private List<String> titles = Arrays.asList("自定义优惠券属性");
+    private List<String> titles = Arrays.asList("自定义优惠券属性","ExpandTextFragment");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             switch (position) {
+                case 0:
+                    return new CouponCustomFragment();
+                case 1:
+                    return new ExpandTextFragment();
                 default:
                     return new CouponCustomFragment();
             }
