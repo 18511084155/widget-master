@@ -207,7 +207,6 @@ public class ExpandTextView extends TextView implements View.OnClickListener {
                 return;//行数不足,不响应点击事件
             }
             setCollapsed(collapsed);
-            clearAnimation();
             // mark that the animation is in progress
             mAnimating = true;
             Animation animation = new ExpandCollapseAnimation(this, getHeight(), getRealTextViewHeight(this, collapsed ? mMaxCollapsedLines : Integer.MAX_VALUE));
@@ -241,6 +240,7 @@ public class ExpandTextView extends TextView implements View.OnClickListener {
                 public void onAnimationRepeat(Animation animation) {
                 }
             });
+            clearAnimation();
             startAnimation(animation);
         }
     }
@@ -263,7 +263,6 @@ public class ExpandTextView extends TextView implements View.OnClickListener {
             final int newHeight = (int) ((mEndHeight - mStartHeight) * interpolatedTime + mStartHeight);
             mTargetView.getLayoutParams().height = newHeight;
             setMaxHeight(newHeight);
-            invalidate();
             if (Float.compare(mAnimAlphaStart, 1.0f) != 0) {
                 applyAlphaAnimation(ExpandTextView.this, mAnimAlphaStart + interpolatedTime * (1.0f - mAnimAlphaStart));
             }
