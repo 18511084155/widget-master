@@ -66,4 +66,10 @@
         <attr name="etv_arrowPadding" format="dimension"/>
         <attr name="etv_is_collapsed" format="boolean|reference"/>
     </declare-styleable>
+
+
+    <declare-styleable name="TimeCountDownView">
+        <attr name="tcd_countDownTime"  format="float"/>
+        <attr name="tcd_count_down_format"  format="string"/>
+    </declare-styleable>
 </resources>
