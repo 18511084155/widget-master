@@ -72,4 +72,8 @@
         <attr name="tcd_countDownTime"  format="float"/>
         <attr name="tcd_count_down_format"  format="string"/>
     </declare-styleable>
+
+    <declare-styleable name="EditTextWithDelete">
+        <attr name="deleteIcon" format="reference" />
+    </declare-styleable>
 </resources>

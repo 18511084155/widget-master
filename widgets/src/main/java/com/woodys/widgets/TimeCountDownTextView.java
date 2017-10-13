@@ -12,10 +12,13 @@ import android.widget.TextView;
  * Created by woodys on 2017/6/08.
  */
 public class TimeCountDownTextView extends TextView {
-    private static final long MAX_COUNTDOWN_TIME = 1000 * 60 * 30; // 30 minutes
+    public final int MINUTES = 60 * 1000;// 分毫秒值
+    public final int HOUR = 60 * MINUTES;// 小时毫秒值
+    public final int DAY = 24 * HOUR;// 天毫秒值
     private CountDownTimer mTimer = null;
     private String mCss;
     private long mCountDownTime;
+    private long mHour;
     private long mSecond;
     private long mMinute;
     private onCountDownFinishListener mOnCountDownFinishListener;
@@ -57,10 +60,6 @@ public class TimeCountDownTextView extends TextView {
     public void start() {
         if (mCountDownTime < 0) {
             mCountDownTime = 0;
-        } else {
-            if (mCountDownTime > MAX_COUNTDOWN_TIME) {
-                mCountDownTime = MAX_COUNTDOWN_TIME;
-            }
         }
         if (mTimer != null) {
             mTimer.cancel();
@@ -69,9 +68,13 @@ public class TimeCountDownTextView extends TextView {
             mTimer = new CountDownTimer(mCountDownTime, countDownInterval) {
                 @Override
                 public void onTick(long millisUntilFinished) {
-                    mMinute = millisUntilFinished / (1000 * 60);
-                    mSecond = (millisUntilFinished % (1000 * 60)) / 1000;
-                    TimeCountDownTextView.this.setText(Html.fromHtml(String.format(mCss, mMinute, mSecond)));
+
+                    //当前时,分,秒
+                    mHour = millisUntilFinished / HOUR;
+                    mMinute = (millisUntilFinished - mHour * HOUR) / MINUTES;
+                    mSecond = millisUntilFinished / 1000 % 60;
+
+                    TimeCountDownTextView.this.setText(Html.fromHtml(String.format(mCss, mHour,mMinute, mSecond)));
                 }
 
                 @Override

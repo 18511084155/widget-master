@@ -20,5 +20,6 @@ dependencies {
 }
 
 //apply from: 'bintray.gradle'
-apply from: rootProject.file('gradle/android-artifacts.gradle')
-apply from: rootProject.file('gradle/gradle-jcenter-push.gradle')
+//apply from: rootProject.file('gradle/android-artifacts.gradle')
+//apply from: rootProject.file('gradle/gradle-jcenter-push.gradle')
+apply from: rootProject.file('gradle/nexus-push.gradle')
