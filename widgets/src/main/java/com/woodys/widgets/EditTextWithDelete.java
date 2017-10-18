@@ -126,7 +126,7 @@ public class EditTextWithDelete extends EditText implements OnFocusChangeListene
             boolean isInnerHeight = (y > 0) && (y < getHeight());
 
             if (isInnerWidth && isInnerHeight) {
-                setText("");
+                setText(null);
                 //联动
                 if (deleteAfterListener != null) {
                     deleteAfterListener.deleteAfter();
