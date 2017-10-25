@@ -76,4 +76,11 @@
     <declare-styleable name="EditTextWithDelete">
         <attr name="deleteIcon" format="reference" />
     </declare-styleable>
+
+    <declare-styleable name="SwitcherView">
+        <attr name="switcherTextColor" format="reference|color"/>
+        <attr name="switcherTextSize" format="dimension"/>
+        <attr name="switcherRollingTime" format="integer"/>
+        <attr name="switcherItemPadding" format="dimension"/>
+    </declare-styleable>
 </resources>
