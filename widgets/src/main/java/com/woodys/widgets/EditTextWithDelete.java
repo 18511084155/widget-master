@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class EditTextWithDelete extends EditText implements OnFocusChangeListener {
 
@@ -80,6 +81,12 @@ public class EditTextWithDelete extends EditText implements OnFocusChangeListene
             }
         });
 
+        setDrawable();
+    }
+
+    @Override
+    public void setText(CharSequence text, BufferType type) {
+        super.setText(text, type);
         setDrawable();
     }
 
