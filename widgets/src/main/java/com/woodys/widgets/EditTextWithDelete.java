@@ -97,7 +97,7 @@ public class EditTextWithDelete extends EditText implements OnFocusChangeListene
         if (mDeleteIconDrawable == null) {
             return;
         }
-        if (length() == 0 || !this.isFocused()) {
+        if (length() == 0) {
             setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         } else {
             setCompoundDrawablesWithIntrinsicBounds(null, null, mDeleteIconDrawable, null);
