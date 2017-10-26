@@ -109,14 +109,14 @@ public class SwitcherView extends TextSwitcher implements ViewSwitcher.ViewFacto
     private void updateTextSwitcher() {
         int size = null!=items?items.size():0;
         if (!isIntercept&&!items.isEmpty()) {
-            currentIndex=(currentIndex>=size)?0:currentIndex;
+            int index = (currentIndex>=size)?0:currentIndex;
             if(hasWindowFocus() && getWindowToken()!=null) {
-                String content = items.get(currentIndex);
+                String content = items.get(index);
                 if(!TextUtils.isEmpty(content)) setText(content);
                 if(onSwitcherSelectListener!=null){
-                    onSwitcherSelectListener.OnSelectListener(currentIndex);
+                    onSwitcherSelectListener.OnSelectListener(index);
                 }
-                ++currentIndex;
+                currentIndex=index+1;
             }
         }
         if(size>1)postDelayed(switcherAction,switchTime);
