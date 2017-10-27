@@ -51,8 +51,7 @@ public class SwitcherView extends TextSwitcher implements ViewSwitcher.ViewFacto
         this.switcherAction = new Runnable() {
             @Override
             public void run() {
-                updateTextSwitcher(++indexCount);
-                isIntercept = false;
+                updateTextSwitcher();
             }
         };
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SwitcherView);
@@ -109,12 +108,12 @@ public class SwitcherView extends TextSwitcher implements ViewSwitcher.ViewFacto
     }
 
 
-    private void updateTextSwitcher(int position) {
+    private synchronized void updateTextSwitcher() {
         int size = null != items ? items.size() : 0;
-        if (!isIntercept && !items.isEmpty()) {
-            if (position >= size) indexCount = 0;
-            int index = (position >= size) ? 0 : position;
+        if (!isIntercept && size>0) {
             if (hasWindowFocus() && getWindowToken() != null) {
+                if (++indexCount >= size) indexCount = 0;
+                int index = (indexCount >= size) ? 0 : indexCount;
                 String content = items.get(index);
                 if (!TextUtils.isEmpty(content)) setText(content);
                 if (onSwitcherSelectListener != null) {
@@ -122,6 +121,8 @@ public class SwitcherView extends TextSwitcher implements ViewSwitcher.ViewFacto
                 }
                 currentIndex = index;
             }
+        }else {
+            isIntercept=false;
         }
         if (size > 1) postDelayed(switcherAction, switchTime);
     }
