@@ -10,9 +10,11 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,11 +25,12 @@ import java.util.List;
  * 垂直滚动的广告栏
  */
 public class SwitcherView extends TextSwitcher implements ViewSwitcher.ViewFactory {
-    private static final int DEFAULT_TIME=3000;
+    private static final int DEFAULT_TIME = 3000;
     private static final String TAG = "SwitcherView";
 
     private final List<String> items;
     private int currentIndex;
+    private int indexCount = -1;
     private final int textSize;
     private final int textColor;
     private final int switchTime;
@@ -44,18 +47,18 @@ public class SwitcherView extends TextSwitcher implements ViewSwitcher.ViewFacto
 
     public SwitcherView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.items =new ArrayList<>();
-        this.switcherAction= new Runnable() {
+        this.items = new ArrayList<>();
+        this.switcherAction = new Runnable() {
             @Override
             public void run() {
-                updateTextSwitcher();
+                updateTextSwitcher(++indexCount);
                 isIntercept = false;
             }
         };
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SwitcherView);
         textColor = ta.getColor(R.styleable.SwitcherView_switcherTextColor, Color.BLACK);
         switchTime = ta.getInt(R.styleable.SwitcherView_switcherRollingTime, DEFAULT_TIME);
-        itemPadding=(int)ta.getDimension(R.styleable.SwitcherView_switcherItemPadding,0f);
+        itemPadding = (int) ta.getDimension(R.styleable.SwitcherView_switcherItemPadding, 0f);
         textSize = ta.getDimensionPixelSize(R.styleable.SwitcherView_switcherTextSize, 0);
         setInAnimation(getContext(), R.anim.m_switcher_vertical_in);
         setOutAnimation(getContext(), R.anim.m_switcher_vertical_out);
@@ -73,14 +76,14 @@ public class SwitcherView extends TextSwitcher implements ViewSwitcher.ViewFacto
         textView.setPadding(10, itemPadding, 10, itemPadding);
         textView.setBackgroundResource(R.drawable.white_item_selector);
         textView.setEllipsize(TextUtils.TruncateAt.END);
-        LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
         textView.setLayoutParams(lp);
         textView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(null!=listener){
-                    listener.onItemClickListener(v,getCurrentIndex());
+                if (null != listener) {
+                    listener.onItemClickListener(v, getCurrentIndex());
                 }
             }
         });
@@ -88,52 +91,53 @@ public class SwitcherView extends TextSwitcher implements ViewSwitcher.ViewFacto
     }
 
     public void setDataSource(List<String> items) {
-        if(null!=items){
+        if (null != items) {
             destroySwitcher();
             this.items.addAll(items);
         }
     }
 
-    public void setDataSource(String[] dataSource){
-        if(null!=dataSource){
+    public void setDataSource(String[] dataSource) {
+        if (null != dataSource) {
             destroySwitcher();
             this.items.addAll(Arrays.asList(dataSource));
         }
     }
 
-    public List<String> getDataSource(){
+    public List<String> getDataSource() {
         return this.items;
     }
 
 
-    private void updateTextSwitcher() {
-        int size = null!=items?items.size():0;
-        if (!isIntercept&&!items.isEmpty()) {
-            int index = (currentIndex>=size)?0:currentIndex;
-            if(hasWindowFocus() && getWindowToken()!=null) {
+    private void updateTextSwitcher(int position) {
+        int size = null != items ? items.size() : 0;
+        if (!isIntercept && !items.isEmpty()) {
+            if (position >= size) indexCount = 0;
+            int index = (position >= size) ? 0 : position;
+            if (hasWindowFocus() && getWindowToken() != null) {
                 String content = items.get(index);
-                if(!TextUtils.isEmpty(content)) setText(content);
-                if(onSwitcherSelectListener!=null){
+                if (!TextUtils.isEmpty(content)) setText(content);
+                if (onSwitcherSelectListener != null) {
                     onSwitcherSelectListener.OnSelectListener(index);
                 }
-                currentIndex=index+1;
+                currentIndex = index;
             }
         }
-        if(size>1)postDelayed(switcherAction,switchTime);
+        if (size > 1) postDelayed(switcherAction, switchTime);
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasWindowFocus) {
         super.onWindowFocusChanged(hasWindowFocus);
         removeCallbacks(switcherAction);
-        if(isRunning&&hasWindowFocus){
+        if (isRunning && hasWindowFocus) {
             post(switcherAction);
         }
     }
 
     public void startRolling() {
         stopSwitcher();
-        isRunning=true;
+        isRunning = true;
         post(switcherAction);
     }
 
@@ -145,11 +149,12 @@ public class SwitcherView extends TextSwitcher implements ViewSwitcher.ViewFacto
         return currentIndex;
     }
 
-    public void stopSwitcher(){
+    public void stopSwitcher() {
         isIntercept = false;
-        isRunning=false;
+        isRunning = false;
         removeCallbacks(switcherAction);
-        currentIndex=0;
+        currentIndex = 0;
+        indexCount = -1;
     }
 
     public boolean isRunning() {
@@ -164,27 +169,27 @@ public class SwitcherView extends TextSwitcher implements ViewSwitcher.ViewFacto
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
-        if(MotionEvent.ACTION_DOWN==action||MotionEvent.ACTION_MOVE==action){
-            isIntercept=true;
-        } else if(MotionEvent.ACTION_UP==action||MotionEvent.ACTION_CANCEL==action){
-            isIntercept=false;
+        if (MotionEvent.ACTION_DOWN == action || MotionEvent.ACTION_MOVE == action) {
+            isIntercept = true;
+        } else if (MotionEvent.ACTION_UP == action || MotionEvent.ACTION_CANCEL == action) {
+            isIntercept = false;
         }
         return super.onTouchEvent(event);
     }
 
-    public void setOnSwitcherItemClickListener(OnSwitcherItemClickListener listener){
-        this.listener=listener;
+    public void setOnSwitcherItemClickListener(OnSwitcherItemClickListener listener) {
+        this.listener = listener;
     }
 
-    public interface OnSwitcherItemClickListener{
+    public interface OnSwitcherItemClickListener {
         void onItemClickListener(View view, int index);
     }
 
-    public void setOnSwitcherSelectListener(OnSwitcherSelectListener listener){
-        this.onSwitcherSelectListener=listener;
+    public void setOnSwitcherSelectListener(OnSwitcherSelectListener listener) {
+        this.onSwitcherSelectListener = listener;
     }
 
-    public interface OnSwitcherSelectListener{
+    public interface OnSwitcherSelectListener {
         void OnSelectListener(int index);
     }
 
