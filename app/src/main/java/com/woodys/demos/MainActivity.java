@@ -14,6 +14,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import com.woodys.demos.fragments.AlignTextFragment;
 import com.woodys.demos.fragments.CouponCustomFragment;
 import com.woodys.demos.fragments.ExpandTextFragment;
 
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.tab) TabLayout mTab;
     @Bind(R.id.pager) ViewPager mPager;
 
-    private List<String> titles = Arrays.asList("自定义优惠券属性","ExpandTextFragment");
+    private List<String> titles = Arrays.asList("自定义优惠券属性","ExpandTextFragment","TextView全角半角混合换行");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
                     return new CouponCustomFragment();
                 case 1:
                     return new ExpandTextFragment();
+                case 2:
+                    return new AlignTextFragment();
                 default:
                     return new CouponCustomFragment();
             }

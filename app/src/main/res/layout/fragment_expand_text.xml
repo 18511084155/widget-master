@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.woodys.widgets.ExpandTextView
+        <com.woodys.widgets.textview.ExpandTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/colorAccent"
@@ -22,7 +22,7 @@
             app:etv_maxCollapsedLines="2"
             app:etv_is_collapsed="false"/>
 
-        <com.woodys.widgets.ExpandTextView
+        <com.woodys.widgets.textview.ExpandTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/gray"
@@ -44,7 +44,7 @@
             android:layout_gravity="center"
             android:text="测试按钮"/>
 
-        <com.woodys.widgets.ExpandTextView
+        <com.woodys.widgets.textview.ExpandTextView
             android:id="@+id/etv_ExpandTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -83,4 +83,9 @@
         <attr name="switcherRollingTime" format="integer"/>
         <attr name="switcherItemPadding" format="dimension"/>
     </declare-styleable>
+
+    <!-- 标点转换 -->
+    <declare-styleable name="AlignTextView">
+        <attr name="at_convert" format="boolean"/>
+    </declare-styleable>
 </resources>

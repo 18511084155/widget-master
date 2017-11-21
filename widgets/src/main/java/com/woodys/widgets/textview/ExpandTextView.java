@@ -1,4 +1,4 @@
-package com.woodys.widgets;
+package com.woodys.widgets.textview;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -13,6 +13,9 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.TextView;
+
+import com.woodys.widgets.DensityUtil;
+import com.woodys.widgets.R;
 
 import java.util.Calendar;
 

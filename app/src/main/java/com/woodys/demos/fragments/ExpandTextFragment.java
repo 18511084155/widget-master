@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.woodys.demos.R;
-import com.woodys.widgets.ExpandTextView;
+import com.woodys.widgets.textview.ExpandTextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
