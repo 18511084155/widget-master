@@ -6,9 +6,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 import com.woodys.demos.R;
 import com.woodys.demos.widgets.AlignTextView1;
 import com.woodys.widgets.textview.aligntextview.AlignTextView;
+import com.woodys.widgets.textview.aligntextview.util.BCConvert;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -47,13 +50,13 @@ public class AlignTextFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        final String text = "订单号： （点击复制）xys12345678901234569999sdhaldadj999999这是一段中英文混合的文本,I am very happy today,aaaaaaaaaa," +
+        String text = "订单号： （点击复制）xys12345678901234569999sdhaldadj999999这是一段中英文混合的文本,I am very happy today,aaaaaaaaaa," +
                 "测试TextView文本对齐AlignTextView可以通过setAlign()方法设置每一段尾行的对齐方式, 默认尾行居左对齐. " +
                 "CBAlignTextView可以像原生TextView一样操作,但是需要使用getRealText()获取文本,欢迎访问open.codeboy.me";
         mTextViewTv.setText(text);
 //        mAlignTv.setPunctuationConvert(true);
         mAlignTv.setText(text);
-        SpannableStringBuilder builder = new SpannableStringBuilder(getString(R.string.order_no_copy, "xys12345678901234569999sdhaldadj999999"));
+        final SpannableStringBuilder builder = new SpannableStringBuilder(getString(R.string.order_no_copy, "xys12345678901234569999sdhaldadj999999"));
         builder.setSpan(new ClickableSpan() {
             @Override
             public void onClick(View widget) {
@@ -68,10 +71,21 @@ public class AlignTextFragment extends Fragment {
                 ds.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12f, getResources().getDisplayMetrics()));
             }
         }, 4, 10, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder.setSpan(new ForegroundColorSpan(getResources()
+                        .getColor(R.color.colorBlueGreyPrimary)), 4,
+                10,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mAlignTv.setText(builder);
         mAlignTv.setMovementMethod(LinkMovementMethod.getInstance());
 
-        mCBAlignTv.setText(builder);
+        mAlignTv.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //mCBAlignTv.setText(builder.append(builder.toString()));
+            }
+        },2000);
+
+        //mCBAlignTv.setText(builder);
         mCBAlignTv.setMovementMethod(LinkMovementMethod.getInstance());
     }
 

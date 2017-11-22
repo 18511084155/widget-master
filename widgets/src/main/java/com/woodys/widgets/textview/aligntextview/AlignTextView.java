@@ -5,6 +5,12 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.os.Build;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.util.AttributeSet;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
@@ -34,7 +40,6 @@ public class AlignTextView extends TextView {
     private CharSequence newText = ""; //新文本，真正显示的文本
     private boolean inProcess = false; //旧文本是否已经处理为新文本
     private boolean isConvert = false; //是否转换标点符号
-    private boolean isAddListener = false; //是否添加监听器
 
     //标点符号用于在textview右侧多出空间时，将空间加到标点符号的后面,以便于右端对齐
     static {
@@ -69,7 +74,6 @@ public class AlignTextView extends TextView {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.AlignTextView, defStyleAttr, 0);
         isConvert = typedArray.getBoolean(R.styleable.AlignTextView_at_convert, false);
         typedArray.recycle();
-        addLayoutListener();
     }
 
 
@@ -162,7 +166,28 @@ public class AlignTextView extends TextView {
         if (newText.length() > 0) {
             newText.deleteCharAt(0);
         }
-        return newText;
+
+        SpannableStringBuilder builder = new SpannableStringBuilder(newText);
+        if(text instanceof Spannable) {
+            Spannable sStr = (Spannable) text;
+            //获取所有的ForegroundSpan
+            ForegroundColorSpan[] colorSpans =  sStr.getSpans(0, sStr.length(), ForegroundColorSpan.class);
+            for(ForegroundColorSpan colorSpan:colorSpans) {
+                builder.setSpan(colorSpan,sStr.getSpanStart(colorSpan),sStr.getSpanEnd(colorSpan), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            //获取所有的RelativeSizeSpan
+            RelativeSizeSpan[] sizeSpans = sStr.getSpans(0, sStr.length(), RelativeSizeSpan.class);
+            for(RelativeSizeSpan sizeSpan:sizeSpans) {
+                builder.setSpan(sizeSpan,sStr.getSpanStart(sizeSpan),sStr.getSpanEnd(sizeSpan), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            //获取所有的RelativeSizeSpan
+            ClickableSpan[] clickableSpans = sStr.getSpans(0, sStr.length(), ClickableSpan.class);
+            for(ClickableSpan clickableSpan:clickableSpans) {
+                builder.setSpan(clickableSpan,sStr.getSpanStart(clickableSpan),sStr.getSpanEnd(clickableSpan), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+
+        }
+        return builder;
     }
 
 
@@ -247,12 +272,14 @@ public class AlignTextView extends TextView {
             return;
         }
         if (!inProcess && (text != null && !text.equals(newText))) {
-            oldText = text;
-            if (!isAddListener) {
-                addLayoutListener();
-            }
-            process(false);
-            super.setText(newText, type);
+            oldText=null!=text?text:"";
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    process(true);
+                }
+            });
+            super.setText(text, type);
         } else {
             //恢复初始状态
             inProcess = false;
@@ -291,31 +318,8 @@ public class AlignTextView extends TextView {
             }
             newText = processText(getPaint(), oldText.toString(), getWidth() - getPaddingLeft() - getPaddingRight());
             inProcess = true;
-            if (setText) setText(newText);
+            if (setText) setText(newText,BufferType.SPANNABLE);
         }
-    }
-
-    /**
-     * 添加监听器，用于在布局进行改变时重新绘制文本
-     */
-    private void addLayoutListener() {
-        isAddListener = true;
-        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver
-                .OnGlobalLayoutListener() {
-
-
-            @Override
-            public void onGlobalLayout() {
-                if (getWidth() == 0) return;
-                process(true);
-                if (Build.VERSION.SDK_INT >= 16) {
-                    getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                } else {
-                    getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                }
-                isAddListener = false;
-            }
-        });
     }
 
     /**

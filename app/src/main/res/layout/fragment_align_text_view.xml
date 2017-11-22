@@ -98,10 +98,8 @@
                 android:background="@drawable/green_select"
                 android:textColorHighlight="@android:color/holo_blue_dark"
                 android:textSize="14sp"
-                android:textIsSelectable="true"
+                android:textIsSelectable="false"
                 android:text="align1_text_view"
-                android:singleLine="true"
-                android:ellipsize="end"
                 cb:at_convert="false"/>
 
         </RelativeLayout>
