@@ -81,7 +81,7 @@ public class AlignTextFragment extends Fragment {
         mAlignTv.postDelayed(new Runnable() {
             @Override
             public void run() {
-                //mCBAlignTv.setText(builder.append(builder.toString()));
+                mCBAlignTv.setText(builder.append(builder.toString()));
             }
         },2000);
 

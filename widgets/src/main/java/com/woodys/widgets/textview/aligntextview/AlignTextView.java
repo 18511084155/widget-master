@@ -6,13 +6,11 @@ import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.os.Build;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.util.AttributeSet;
-import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import com.woodys.widgets.R;
@@ -168,22 +166,22 @@ public class AlignTextView extends TextView {
         }
 
         SpannableStringBuilder builder = new SpannableStringBuilder(newText);
-        if(text instanceof Spannable) {
+        if (text instanceof Spannable) {
             Spannable sStr = (Spannable) text;
             //获取所有的ForegroundSpan
-            ForegroundColorSpan[] colorSpans =  sStr.getSpans(0, sStr.length(), ForegroundColorSpan.class);
-            for(ForegroundColorSpan colorSpan:colorSpans) {
-                builder.setSpan(colorSpan,sStr.getSpanStart(colorSpan),sStr.getSpanEnd(colorSpan), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ForegroundColorSpan[] colorSpans = sStr.getSpans(0, sStr.length(), ForegroundColorSpan.class);
+            for (ForegroundColorSpan colorSpan : colorSpans) {
+                builder.setSpan(colorSpan, sStr.getSpanStart(colorSpan), sStr.getSpanEnd(colorSpan), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             //获取所有的RelativeSizeSpan
             RelativeSizeSpan[] sizeSpans = sStr.getSpans(0, sStr.length(), RelativeSizeSpan.class);
-            for(RelativeSizeSpan sizeSpan:sizeSpans) {
-                builder.setSpan(sizeSpan,sStr.getSpanStart(sizeSpan),sStr.getSpanEnd(sizeSpan), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            for (RelativeSizeSpan sizeSpan : sizeSpans) {
+                builder.setSpan(sizeSpan, sStr.getSpanStart(sizeSpan), sStr.getSpanEnd(sizeSpan), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             //获取所有的RelativeSizeSpan
             ClickableSpan[] clickableSpans = sStr.getSpans(0, sStr.length(), ClickableSpan.class);
-            for(ClickableSpan clickableSpan:clickableSpans) {
-                builder.setSpan(clickableSpan,sStr.getSpanStart(clickableSpan),sStr.getSpanEnd(clickableSpan), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            for (ClickableSpan clickableSpan : clickableSpans) {
+                builder.setSpan(clickableSpan, sStr.getSpanStart(clickableSpan), sStr.getSpanEnd(clickableSpan), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
         }
@@ -272,7 +270,7 @@ public class AlignTextView extends TextView {
             return;
         }
         if (!inProcess && (text != null && !text.equals(newText))) {
-            oldText=null!=text?text:"";
+            oldText = null != text ? text : "";
             post(new Runnable() {
                 @Override
                 public void run() {
@@ -316,9 +314,9 @@ public class AlignTextView extends TextView {
             if (getWidth() == 0) {
                 return;
             }
-            newText = processText(getPaint(), oldText.toString(), getWidth() - getPaddingLeft() - getPaddingRight());
+            newText = processText(getPaint(), oldText, getWidth() - getPaddingLeft() - getPaddingRight());
             inProcess = true;
-            if (setText) setText(newText,BufferType.SPANNABLE);
+            if (setText) setText(newText, BufferType.SPANNABLE);
         }
     }
 
