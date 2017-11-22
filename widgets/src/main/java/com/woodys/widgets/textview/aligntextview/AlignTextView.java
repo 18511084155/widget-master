@@ -3,6 +3,7 @@ package com.woodys.widgets.textview.aligntextview;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
 import android.text.TextUtils;
@@ -34,7 +35,6 @@ public class AlignTextView extends TextView {
     private CharSequence oldText = ""; //旧文本，本来应该显示的文本
     private CharSequence newText = ""; //新文本，真正显示的文本
     private boolean inProcess = false; //旧文本是否已经处理为新文本
-    private boolean isAddPadding = false; //是否添加过边距
     private boolean isConvert = false; //是否转换标点符号
     private boolean isAddListener = false; //是否添加监听器
 
@@ -59,26 +59,21 @@ public class AlignTextView extends TextView {
     }
 
     public AlignTextView(Context context) {
-        super(context);
-        addLayoutListener();
+        this(context, null);
     }
 
     public AlignTextView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.AlignTextView);
-        isConvert = ta.getBoolean(R.styleable.AlignTextView_at_convert, false);
-        ta.recycle();
-        addLayoutListener();
-
-        //判断使用xml中是用android:text
-        TypedArray tsa = context.obtainStyledAttributes(attrs, new int[]{android.R.attr.text});
-        String text = tsa.getString(0);
-        if (!TextUtils.isEmpty(text)) {
-            setText(text);
-        }
-        tsa.recycle();
-
+        this(context, attrs, 0);
     }
+
+    public AlignTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.AlignTextView, defStyleAttr, 0);
+        isConvert = typedArray.getBoolean(R.styleable.AlignTextView_at_convert,false);
+        typedArray.recycle();
+        addLayoutListener();
+    }
+
 
     /**
      * 监听文本复制，对于复制的文本进行空格剔除
@@ -286,7 +281,7 @@ public class AlignTextView extends TextView {
             oldText = "";
         }
         if (!inProcess && getVisibility() == VISIBLE) {
-            addCharPosition.clear();
+            if(null!=addCharPosition) addCharPosition.clear();
 
             //转化字符，5.0系统对字体处理有所变动
             if (isConvert) {
@@ -296,19 +291,7 @@ public class AlignTextView extends TextView {
             if (getWidth() == 0) {
                 return;
             }
-
-            //添加过边距之后不再次添加
-            if (!isAddPadding) {
-                int spaceWidth = (int) (getPaint().measureText(SPACE + ""));
-                newText = processText(getPaint(), oldText.toString(), getWidth() - getPaddingLeft() -
-                        getPaddingRight() - spaceWidth);
-                setPadding(getPaddingLeft() + spaceWidth, getPaddingTop(), getPaddingRight(),
-                        getPaddingBottom());
-                isAddPadding = true;
-            } else {
-                newText = processText(getPaint(), oldText.toString(), getWidth() - getPaddingLeft() -
-                        getPaddingRight());
-            }
+            newText = processText(getPaint(), oldText.toString(), getWidth() - getPaddingLeft() - getPaddingRight());
             inProcess = true;
             if (setText) setText(newText);
         }

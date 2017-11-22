@@ -44,6 +44,31 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/align1_text_view_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/red"
+                android:padding="3dp"
+                android:text="align1_text_view"
+                android:textSize="17sp"
+                android:textStyle="bold">
+            </TextView>
+
+            <com.woodys.demos.widgets.AlignTextView1
+                android:id="@+id/align_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/align1_text_view_title"
+                android:background="@color/colorBluePrimary"
+                android:textSize="14sp"
+                cb:align="left"/>
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -58,6 +83,8 @@
                 android:padding="3dp"
                 android:text="align_text_view"
                 android:textSize="17dp"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:textStyle="bold"/>
 
             <com.woodys.widgets.textview.aligntextview.AlignTextView
@@ -67,8 +94,10 @@
                 android:layout_below="@id/align_text_view_title"
                 android:background="@drawable/green_select"
                 android:textColorHighlight="@android:color/holo_blue_dark"
-                android:textIsSelectable="true"
+                android:textColorLink="@color/light_pink"
+                android:text="订单号： （点击复制）xys12345678901234569999sdhaldadj9"
                 android:textSize="14sp"
+                android:textIsSelectable="false"
                 cb:at_convert="false"/>
 
         </RelativeLayout>

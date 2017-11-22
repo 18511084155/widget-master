@@ -4,13 +4,21 @@ package com.woodys.demos.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
+import android.text.style.ClickableSpan;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.woodys.demos.R;
+import com.woodys.demos.widgets.AlignTextView1;
 import com.woodys.widgets.textview.aligntextview.AlignTextView;
 
 import butterknife.Bind;
@@ -22,8 +30,10 @@ import butterknife.ButterKnife;
 public class AlignTextFragment extends Fragment {
     @Bind(R.id.text_view)
     TextView mTextViewTv;
+    @Bind(R.id.align_text_view)
+    AlignTextView1 mAlignTv;
     @Bind(R.id.cb_align_text_view)
-    AlignTextView mAlignTv;
+    AlignTextView mCBAlignTv;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +54,24 @@ public class AlignTextFragment extends Fragment {
         mTextViewTv.setText(text);
 //        mAlignTv.setPunctuationConvert(true);
         mAlignTv.setText(text);
+        SpannableStringBuilder builder = new SpannableStringBuilder(getString(R.string.order_no_copy, "xys12345678901234569999sdhaldadj999999"));
+        builder.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                Toast.makeText(getContext(),"复制成功",Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setColor(ds.linkColor);
+                ds.setUnderlineText(true);
+                ds.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12f, getResources().getDisplayMetrics()));
+            }
+        }, 4, 10, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        mCBAlignTv.setText(builder);
+        mCBAlignTv.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     @Override
