@@ -67,6 +67,8 @@
                 android:layout_below="@+id/align1_text_view_title"
                 android:background="@color/colorBluePrimary"
                 android:textSize="14sp"
+                android:singleLine="true"
+                android:ellipsize="end"
                 cb:align="left"/>
         </RelativeLayout>
 
@@ -83,6 +85,7 @@
                 android:padding="3dp"
                 android:text="align_text_view"
                 android:textSize="17dp"
+
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:textStyle="bold"/>
@@ -94,10 +97,11 @@
                 android:layout_below="@id/align_text_view_title"
                 android:background="@drawable/green_select"
                 android:textColorHighlight="@android:color/holo_blue_dark"
-                android:textColorLink="@color/light_pink"
-                android:text="订单号： （点击复制）xys12345678901234569999sdhaldadj9"
                 android:textSize="14sp"
-                android:textIsSelectable="false"
+                android:textIsSelectable="true"
+                android:text="align1_text_view"
+                android:singleLine="true"
+                android:ellipsize="end"
                 cb:at_convert="false"/>
 
         </RelativeLayout>

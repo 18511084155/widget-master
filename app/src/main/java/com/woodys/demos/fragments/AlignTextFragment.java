@@ -8,7 +8,6 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
-import android.text.method.ScrollingMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -69,6 +68,8 @@ public class AlignTextFragment extends Fragment {
                 ds.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12f, getResources().getDisplayMetrics()));
             }
         }, 4, 10, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mAlignTv.setText(builder);
+        mAlignTv.setMovementMethod(LinkMovementMethod.getInstance());
 
         mCBAlignTv.setText(builder);
         mCBAlignTv.setMovementMethod(LinkMovementMethod.getInstance());

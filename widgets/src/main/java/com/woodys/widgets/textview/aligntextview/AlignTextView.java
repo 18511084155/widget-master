@@ -151,11 +151,11 @@ public class AlignTextView extends TextView {
      * @param width 最大可用宽度
      * @return 处理后的文本
      */
-    private String processText(Paint paint, String text, int width) {
+    private CharSequence processText(Paint paint, CharSequence text, int width) {
         if (text == null || text.length() == 0) {
             return "";
         }
-        String[] lines = text.split("\\n");
+        String[] lines = text.toString().split("\\n");
         StringBuilder newText = new StringBuilder();
         for (String line : lines) {
             newText.append('\n');
@@ -164,7 +164,7 @@ public class AlignTextView extends TextView {
         if (newText.length() > 0) {
             newText.deleteCharAt(0);
         }
-        return newText.toString();
+        return newText;
     }
 
 
@@ -177,7 +177,7 @@ public class AlignTextView extends TextView {
      * @param addCharacterStartPosition 添加文本的起始位置
      * @return 处理后的文本
      */
-    private String processLine(Paint paint, String text, int width, int addCharacterStartPosition) {
+    private CharSequence processLine(Paint paint, CharSequence text, int width, int addCharacterStartPosition) {
         if (text == null || text.length() == 0) return "";
 
         StringBuilder old = new StringBuilder(text);
@@ -238,7 +238,7 @@ public class AlignTextView extends TextView {
             }
         }
 
-        return old.toString();
+        return old;
     }
 
     @Override
