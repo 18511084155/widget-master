@@ -3,10 +3,8 @@ package com.woodys.widgets.textview.aligntextview;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
@@ -69,7 +67,7 @@ public class AlignTextView extends TextView {
     public AlignTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.AlignTextView, defStyleAttr, 0);
-        isConvert = typedArray.getBoolean(R.styleable.AlignTextView_at_convert,false);
+        isConvert = typedArray.getBoolean(R.styleable.AlignTextView_at_convert, false);
         typedArray.recycle();
         addLayoutListener();
     }
@@ -281,7 +279,7 @@ public class AlignTextView extends TextView {
             oldText = "";
         }
         if (!inProcess && getVisibility() == VISIBLE) {
-            if(null!=addCharPosition) addCharPosition.clear();
+            if (null != addCharPosition) addCharPosition.clear();
 
             //转化字符，5.0系统对字体处理有所变动
             if (isConvert) {
