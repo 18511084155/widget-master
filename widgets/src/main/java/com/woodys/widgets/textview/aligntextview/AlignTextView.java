@@ -11,6 +11,7 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.util.AttributeSet;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import com.woodys.widgets.R;
@@ -38,6 +39,7 @@ public class AlignTextView extends TextView {
     private CharSequence newText = ""; //新文本，真正显示的文本
     private boolean inProcess = false; //旧文本是否已经处理为新文本
     private boolean isConvert = false; //是否转换标点符号
+    private boolean isAddListener = false; //是否添加监听器
 
     //标点符号用于在textview右侧多出空间时，将空间加到标点符号的后面,以便于右端对齐
     static {
@@ -120,6 +122,27 @@ public class AlignTextView extends TextView {
         }
     }
 
+    /**
+     * 添加监听器，用于在布局进行改变时重新绘制文本
+     */
+    private void addLayoutListener() {
+        isAddListener = true;
+        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (getWidth() == 0) {
+                    return;
+                }
+                process(true);
+                if (Build.VERSION.SDK_INT >= 16) {
+                    getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+                isAddListener = false;
+            }
+        });
+    }
 
     /**
      * 复制文本到剪切板，去除添加字符
@@ -270,13 +293,11 @@ public class AlignTextView extends TextView {
             return;
         }
         if (!inProcess && (text != null && !text.equals(newText))) {
-            oldText = null != text ? text : "";
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    process(true);
-                }
-            });
+            oldText = text;
+            if (!isAddListener) {
+                addLayoutListener();
+            }
+            process(false);
             super.setText(newText, type);
         } else {
             //恢复初始状态
