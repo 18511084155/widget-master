@@ -303,7 +303,7 @@ public class AlignTextView extends TextView {
         if (oldText == null) {
             oldText = "";
         }
-        if (!inProcess && getVisibility() == VISIBLE) {
+        if (!inProcess) {
             if (null != addCharPosition) addCharPosition.clear();
 
             //转化字符，5.0系统对字体处理有所变动

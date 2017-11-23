@@ -70,11 +70,11 @@ public class AlignTextFragment extends Fragment {
                 ds.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12f, getResources().getDisplayMetrics()));
             }
         }, 4, 10, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        builder.setSpan(new ForegroundColorSpan(getResources()
+       /* builder.setSpan(new ForegroundColorSpan(getResources()
                         .getColor(R.color.colorBlueGreyPrimary)), 4,
                 10,
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        mAlignTv.setText(builder);
+        mAlignTv.setText(builder);*/
         //mAlignTv.setMovementMethod(LinkMovementMethod.getInstance());
 
         /*mAlignTv.postDelayed(new Runnable() {
