@@ -277,7 +277,7 @@ public class AlignTextView extends TextView {
                     process(true);
                 }
             });
-            super.setText(text, type);
+            super.setText(newText, type);
         } else {
             //恢复初始状态
             inProcess = false;

@@ -54,9 +54,8 @@ public class AlignTextFragment extends Fragment {
                 "测试TextView文本对齐AlignTextView可以通过setAlign()方法设置每一段尾行的对齐方式, 默认尾行居左对齐. " +
                 "CBAlignTextView可以像原生TextView一样操作,但是需要使用getRealText()获取文本,欢迎访问open.codeboy.me";
         mTextViewTv.setText(text);
-//        mAlignTv.setPunctuationConvert(true);
         mAlignTv.setText(text);
-        final SpannableStringBuilder builder = new SpannableStringBuilder(getString(R.string.order_no_copy, "xys12345678901234569999sdhaldadj999999"));
+        final SpannableStringBuilder builder = new SpannableStringBuilder(getString(R.string.order_no_copy, "aektxyqbmall26508470458064897"));
         builder.setSpan(new ClickableSpan() {
             @Override
             public void onClick(View widget) {
@@ -76,17 +75,18 @@ public class AlignTextFragment extends Fragment {
                 10,
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mAlignTv.setText(builder);
-        mAlignTv.setMovementMethod(LinkMovementMethod.getInstance());
+        //mAlignTv.setMovementMethod(LinkMovementMethod.getInstance());
 
-        mAlignTv.postDelayed(new Runnable() {
+        /*mAlignTv.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mCBAlignTv.setText(builder.append(builder.toString()));
+                mCBAlignTv.setText(builder);
+                mCBAlignTv.setMovementMethod(LinkMovementMethod.getInstance());
             }
-        },2000);
-
-        //mCBAlignTv.setText(builder);
+        },2000);*/
+        mCBAlignTv.setText(builder);
         mCBAlignTv.setMovementMethod(LinkMovementMethod.getInstance());
+
     }
 
     @Override
