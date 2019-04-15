@@ -88,4 +88,18 @@
     <declare-styleable name="AlignTextView">
         <attr name="at_convert" format="boolean"/>
     </declare-styleable>
+
+    <declare-styleable name="GridCenterLayout">
+        <attr name="gl_fixRaw" format="integer" />
+        <attr name="gl_itemWidth" format="dimension" />
+        <attr name="gl_itemHeight" format="dimension|enum" >
+            <enum name="auto_height" value="-1"/>
+        </attr>
+        <attr name="gl_itemHorizontalPadding" format="dimension" />
+        <attr name="gl_itemVerticalPadding" format="dimension" />
+        <attr name="gl_itemSizeMode" format="enum">
+            <enum name="item_width" value="0x00" />
+            <enum name="horizontal_padding" value="0x01" />
+        </attr>
+    </declare-styleable>
 </resources>
