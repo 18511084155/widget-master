@@ -6,11 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.woodys.demos.R;
-import com.woodys.demos.widgets.AlignTextView1;
 import com.woodys.widgets.textview.aligntextview.AlignTextView;
-import com.woodys.widgets.textview.aligntextview.util.BCConvert;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -32,8 +28,6 @@ import butterknife.ButterKnife;
 public class AlignTextFragment extends Fragment {
     @Bind(R.id.text_view)
     TextView mTextViewTv;
-    @Bind(R.id.align_text_view)
-    AlignTextView1 mAlignTv;
     @Bind(R.id.cb_align_text_view)
     AlignTextView mCBAlignTv;
 
@@ -54,7 +48,6 @@ public class AlignTextFragment extends Fragment {
                 "测试TextView文本对齐AlignTextView可以通过setAlign()方法设置每一段尾行的对齐方式, 默认尾行居左对齐. " +
                 "CBAlignTextView可以像原生TextView一样操作,但是需要使用getRealText()获取文本,欢迎访问open.codeboy.me";
         mTextViewTv.setText(text);
-        mAlignTv.setText(text);
         final SpannableStringBuilder builder = new SpannableStringBuilder(getString(R.string.order_no_copy, "aektxyqbmall26508470458064897"));
         builder.setSpan(new ClickableSpan() {
             @Override

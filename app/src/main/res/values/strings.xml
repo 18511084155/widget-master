@@ -5,4 +5,14 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="desc_string">  TextView  顾名思义：就是在界面上呈现文本信息，主要用于显示，没有特殊的事件响应。然而EditText与TexView非常相似，EditText就是多了一个可以让用户输入内容的编辑框功能。     大家可以把EditText看作是编辑内容的那个框，TextView是用于显示文本内容的框。  其实就是这么简单。然而EditText是TextView的子类。接下来就是TextView和EditText的全部XML属性如下。不过在此之前，要先解释一个属性margin和padding</string>
     <string name="order_no_copy">订单号：(点击复制)&#160; %1$s</string>
+
+    <string name="drawable_padding">Drawable边距</string>
+    <string name="width">Width</string>
+    <string name="height">Height</string>
+    <string name="fixRaw">Raw</string>
+
+    <string name="horizontal_padding">HorizontalPadding</string>
+    <string name="vertical_padding">VerticalPadding</string>
+    <string name="add">添加</string>
+    <string name="remove">移除</string>
 </resources>

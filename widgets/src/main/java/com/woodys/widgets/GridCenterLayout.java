@@ -14,7 +14,7 @@ import com.woodys.widgets.utils.ViewCompat;
  * 一个组控件组
  */
 public class GridCenterLayout extends ViewGroup {
-    public static final int AUTO_HEIGHT=-1;
+    public static final int AUTO_HEIGHT = -1;
     public static final int ITEM_WIDTH = 0x00;
     public static final int HORIZONTAL_PADDING = 0x01;
     private int fixRaw;//固定列表
@@ -94,7 +94,7 @@ public class GridCenterLayout extends ViewGroup {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int childCount = getChildCount();
-        int childWidth, childHeight=0;
+        int childWidth, childHeight = 0;
         int paddingLeft = getPaddingLeft();
         int paddingTop = getPaddingTop();
         int paddingRight = getPaddingRight();
@@ -112,7 +112,7 @@ public class GridCenterLayout extends ViewGroup {
                         } else {
                             itemWidth = fixItemWidth;
                         }
-                        horizontalPadding = (width - fixRaw * itemWidth) / (fixRaw - 1);
+                        horizontalPadding = (width - fixRaw * itemWidth) / (fixRaw - 1>0?fixRaw - 1:1);
                         break;
                     case HORIZONTAL_PADDING:
                         //当固定尺寸大小,以及固定边距超出宽时
@@ -131,37 +131,47 @@ public class GridCenterLayout extends ViewGroup {
             switch (itemSizeMode) {
                 case ITEM_WIDTH:
                     //不设定raw,则取width
-                    raw = width / childWidth;
+                    raw = width / (childWidth>0?childWidth:1);
                     if (0 < childCount && childCount < raw) {
                         raw = childCount;
                     }
-                    horizontalPadding = (width - childWidth * raw) / (raw - 1);
+                    if (childWidth <= 0) {
+                        //最大水平间距
+                        int maxHorizontalPadding = width / (raw - 1>0?raw - 1:1);
+                        if (fixHorizontalPadding > maxHorizontalPadding) {
+                            fixHorizontalPadding = maxHorizontalPadding;
+                        }
+                        childWidth = (width - (raw - 1) * fixHorizontalPadding) / raw;
+                        horizontalPadding = fixHorizontalPadding;
+                    } else {
+                        horizontalPadding = (width - childWidth * raw) / (raw - 1>0?raw - 1:1);
+                    }
                     break;
                 case HORIZONTAL_PADDING:
                     //边距为主,自适应
                     horizontalPadding = fixHorizontalPadding;
-                    raw = width / (childWidth + horizontalPadding);
-                    if (width < (width - raw * fixItemWidth) - (raw - 1) * fixHorizontalPadding) {
+                    raw = (fixHorizontalPadding + childWidth>0) ? (width - childWidth) / (fixHorizontalPadding + childWidth) + 1:1;
+                    while (width < (raw * fixItemWidth + (raw - 1) * fixHorizontalPadding)) {
                         //超出,列减
                         raw--;
                     }
-                    itemWidth = (width - (raw - 1) * fixHorizontalPadding) / raw;
-                    childWidth = itemWidth;
+                    childWidth = (width - (raw - 1) * fixHorizontalPadding) / raw;
+                    itemWidth = childWidth;
                     break;
             }
         }
-        int row = (0 == childCount % raw) ? childCount / raw : childCount / raw + 1;//fixRaw
+        int row = childCount>0? ((0 == childCount % raw) ? childCount / raw : childCount / raw + 1):1;//fixRaw
         int cellWidthSpec = MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.EXACTLY);
-        int cellHeightSpec =heightMeasureSpec;
-        if(AUTO_HEIGHT!=itemHeight){
+        int cellHeightSpec = heightMeasureSpec;
+        if (AUTO_HEIGHT != itemHeight) {
             childHeight = itemHeight;
             cellHeightSpec = MeasureSpec.makeMeasureSpec(childHeight, MeasureSpec.EXACTLY);
         }
         for (int index = 0; index < childCount; index++) {
             final View child = getChildAt(index);
             child.measure(cellWidthSpec, cellHeightSpec);
-            if(0>itemHeight) {
-                itemHeight=child.getMeasuredHeight();
+            if (0 > itemHeight) {
+                itemHeight = child.getMeasuredHeight();
                 childHeight = itemHeight;
             }
         }
@@ -189,19 +199,27 @@ public class GridCenterLayout extends ViewGroup {
             int itemWidth = child.getMeasuredWidth();
             int itemHeight = child.getMeasuredHeight();
 
-            MarginLayoutParams lp = (MarginLayoutParams)child.getLayoutParams();
-            x += lp.leftMargin;
-            y += lp.topMargin;
-            child.layout(x, y , x + itemWidth, y + itemHeight);
+            ViewGroup.MarginLayoutParams marginParams = null;
+            ViewGroup.LayoutParams params = child.getLayoutParams();
+            //获取view的margin设置参数
+            if (params instanceof ViewGroup.MarginLayoutParams) {
+                marginParams = (ViewGroup.MarginLayoutParams) params;
+            } else {
+                //不存在时创建一个新的参数,基于View本身原有的布局参数对象
+                marginParams = new ViewGroup.MarginLayoutParams(params);
+            }
+            x += marginParams.leftMargin;
+            y += marginParams.topMargin;
+            child.layout(x, y, x + itemWidth, y + itemHeight);
 
             //当设置了raw时,让条目居中,否则,条目靠左
             if (index >= (raw - 1)) {
                 index = 0;
                 x = paddingLeft;
-                y += (itemHeight + verticalPadding + lp.bottomMargin);
+                y += (itemHeight + verticalPadding + marginParams.bottomMargin);
             } else {
                 index++;
-                x += (itemWidth + horizontalPadding + lp.rightMargin);
+                x += (itemWidth + horizontalPadding + marginParams.rightMargin);
             }
         }
     }
@@ -221,7 +239,7 @@ public class GridCenterLayout extends ViewGroup {
 
     @Override
     public LayoutParams generateLayoutParams(AttributeSet attrs) {
-        return new MarginLayoutParams(getContext(),attrs);
+        return new MarginLayoutParams(getContext(), attrs);
     }
 
     @Override
@@ -232,7 +250,6 @@ public class GridCenterLayout extends ViewGroup {
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
-
 
 
 }

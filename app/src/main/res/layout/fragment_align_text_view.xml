@@ -32,32 +32,6 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/align1_text_view_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/red"
-            android:padding="3dp"
-            android:text="align1_text_view"
-            android:textSize="17sp"
-            android:textStyle="bold">
-        </TextView>
-
-        <com.woodys.demos.widgets.AlignTextView1
-            android:id="@+id/align_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/align1_text_view_title"
-            android:background="@color/colorBluePrimary"
-            android:textSize="14sp"
-            android:singleLine="true"
-            android:ellipsize="end"
-            cb:align="left"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="25dp"
         android:paddingLeft="20dp"
